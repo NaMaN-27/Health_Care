@@ -24,12 +24,12 @@ st.markdown(
     """
     <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
         <div>
-            <span style="font-size:28px; font-weight:600;">Jeswani Clinic</span>
-            <span style="font-size:18px; font-weight:400; color:#cccccc;">
+            <span style="font-size:28px; font-weight:800;">Jeswani Clinic</span>
+            <span style="font-size:18px; font-weight:600; ">
                 &nbsp;&nbsp;Hirala Chowk, Beed
             </span>
         </div>
-        <div style="font-size:18px; font-weight:400; color:#cccccc;">
+        <div style="font-size:18px; font-weight:400; ">
             Mob No: 9890460700
         </div>
     </div>
