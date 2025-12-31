@@ -1,53 +1,53 @@
 {
-  "Names of tablets": [
-    "Amoxicilin",
-    "citric",
-    "para",
-    "ND",
-    "Unienzme",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "I",
-    "J",
-    "K"
-  ],
-  "Name of injection": [
-    "genta",
-    "Dexa | Genta",
-    "diclo",
-    "vit c",
-    "Histac",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H"
-  ],
-  "Name of Syrup": [
-    "cytal",
-    "enzym",
-    "Hungry",
-    "a",
-    "b",
-    "n",
-    "fe",
-    "rtwet",
-    "re",
-    "qweqwdc",
-    "qwdfqwcq",
-    "qwcfq"
-  ],
-  "Others": [
-    "ASD",
-    "Nebulizer",
-    "Clean syring"
-  ]
+    "Names of tablets": [
+        "citric",
+        "para",
+        "ND",
+        "Amoxicilin",
+        "Unienzme",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "I",
+        "J",
+        "K"
+    ],
+    "Name of injection": [
+        "genta",
+        "Dexa | Genta",
+        "diclo",
+        "vit c",
+        "Histac",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+    ],
+    "Name of Syrup": [
+        "cytal",
+        "enzym",
+        "Hungry",
+        "a",
+        "b",
+        "n",
+        "fe",
+        "rtwet",
+        "re",
+        "qweqwdc",
+        "qwdfqwcq",
+        "qwcfq"
+    ],
+    "Others": [
+        "ASD",
+        "Nebulizer",
+        "Clean syring"
+    ]
 }
