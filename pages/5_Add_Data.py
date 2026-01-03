@@ -2,7 +2,9 @@ import streamlit as st
 import json
 import os
 
-DATA_FILE = "data.json"
+from load_data import load, save_json_to_firebase
+
+
 
 st.set_page_config(page_title="Add Data", layout="centered")
 st.title("➕ Add Multiple Items")
@@ -10,12 +12,13 @@ st.title("➕ Add Multiple Items")
 # -----------------------------
 # Load JSON
 # -----------------------------
-if not os.path.exists(DATA_FILE):
-    st.error("data.json not found")
+try:
+    data =load()
+except Exception as e:
+    st.error("Failed to load data.json from Firebase")
+    st.exception(e)
     st.stop()
 
-with open(DATA_FILE, "r") as f:
-    data = json.load(f)
 
 # -----------------------------
 # Category Mapping
@@ -73,8 +76,7 @@ if st.button("Save All"):
 
     # Save only if something changed
     if added:
-        with open(DATA_FILE, "w") as f:
-            json.dump(data, f, indent=2)
+        save_json_to_firebase(data)
 
         st.success(f"✅ Added {len(added)} item(s)")
 

@@ -2,13 +2,17 @@ import json
 import streamlit as st
 import math
 
+from load_data import load_json_from_firebase
+
+
+
 st.title("TABLETS")
 
 # -----------------------------
 # Load data
 # -----------------------------
-with open("data.json", "r") as f:
-    data = json.load(f)
+data = load_json_from_firebase()
+
 
 tablets = data["Names of tablets"]
 

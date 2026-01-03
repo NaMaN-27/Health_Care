@@ -1,14 +1,19 @@
 import streamlit as st
 import json
 import datetime
+import firebase_admin
+from firebase_admin import credentials,storage
 
-with open("data.json", "r") as f:
-    data = json.load(f)
 
-tablets = data["Names of tablets"]
-injections = data["Name of injection"]
-syrups = data["Name of Syrup"]
-others = data["Others"]
+if not firebase_admin._apps:
+    firebase_creds = dict(st.secrets["firebase"])
+    cred = credentials.Certificate(firebase_creds)
+
+    firebase_admin.initialize_app(cred, {
+        "storageBucket": "jeswaniclinic-de930.firebasestorage.app"
+    })
+
+
 
 # Initialize expected session state keys if missing
 for k in ("tablets_selected", "syrups_selected", "injections_selected", "others_selected"):

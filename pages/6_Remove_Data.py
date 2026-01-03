@@ -2,21 +2,19 @@ import streamlit as st
 import json
 import os
 
-DATA_FILE = "data.json"
+from load_data import load, save_json_to_firebase
+
+
 
 st.set_page_config(page_title="Remove Data", layout="centered")
 st.title("🗑 Remove Items")
 
-# -----------------------------
-# Load JSON
-# -----------------------------
-if not os.path.exists(DATA_FILE):
-    st.error("data.json not found")
+try:
+    data =load()
+except Exception as e:
+    st.error("Failed to load data.json from Firebase")
+    st.exception(e)
     st.stop()
-
-with open(DATA_FILE, "r") as f:
-    data = json.load(f)
-
 # -----------------------------
 # Category Mapping
 # -----------------------------
@@ -59,8 +57,7 @@ if st.button("Remove Selected"):
 
     data[json_key] = [i for i in items if i not in selected_items]
 
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+    save_json_to_firebase(data)
 
     st.success(f"✅ Removed {len(selected_items)} item(s)")
     st.rerun()

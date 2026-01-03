@@ -2,6 +2,8 @@ import streamlit as st
 import json
 import uuid
 
+from load_data import load, save_json_to_firebase
+
 st.set_page_config(layout="centered")
 
 DATA_FILE = "data.json"
@@ -10,12 +12,16 @@ DATA_FILE = "data.json"
 # Helpers
 # -----------------------------
 def load_data():
-    with open(DATA_FILE, "r") as f:
-        return json.load(f)
+    try:
+        data =load()
+    except Exception as e:
+        st.error("Failed to load data.json from Firebase")
+        st.exception(e)
+        st.stop()
+    return data
 
 def save_data(data):
-    with open(DATA_FILE, "w") as f:
-        json.dump(data, f, indent=4)
+    save_json_to_firebase(data)
 
 data = load_data()
 
