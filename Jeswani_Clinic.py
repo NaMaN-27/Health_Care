@@ -25,22 +25,39 @@ st.set_page_config(layout="centered")
 # --------------------------------------
 # HEADER — single line
 # --------------------------------------
-st.markdown(
-    """
-    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-        <div>
-            <span style="font-size:28px; font-weight:800;">Jeswani Clinic</span>
-            <span style="font-size:18px; font-weight:600; ">
-                &nbsp;&nbsp;Hirala Chowk, Beed
-            </span>
-        </div>
-        <div style="font-size:18px; font-weight:400; ">
-            Mob No: 9890460700
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<style>
+@page {
+  size: A5;
+  margin: 10mm;
+}
+
+@media print {
+  section.main > div {
+    width: 148mm !important;
+  }
+}
+</style>
+
+<div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+  
+  <div style="display:flex; align-items:baseline; gap:10px;">
+    <span style="font-size:28px; font-weight:800;">
+      Jeswani Clinic
+    </span>
+    <span style="font-size:18px; font-weight:600;">
+      Hirala Chowk, Beed
+    </span>
+  </div>
+
+  <div style="font-size:18px; font-weight:400;">
+    Mob No: 9890460700
+  </div>
+
+</div>
+""", unsafe_allow_html=True)
+
+
 
 # --------------------------------------
 # ID + NAME + DATE
