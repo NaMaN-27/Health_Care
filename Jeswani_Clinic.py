@@ -88,9 +88,9 @@ with left:
             col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
             
             with col1:
-                # Render a dropdown for each selected item
+                # Render a dropdown for each selected item without any label
                 selected_item = st.selectbox(
-                    f"Select item {idx + 1}",
+                    "",
                     tablets,
                     index=tablets.index(item) if item else 0,  # Keep the previously selected item
                     key=f"dropdown_{idx}"
@@ -104,9 +104,8 @@ with left:
                     st.session_state.selected_items.pop(idx)
                     break  # Exit loop to refresh the UI immediately
     else:
-        # Don't show "No items selected" if we just have the "Add more" button and no selection yet
-        if not st.session_state.selected_items and st.session_state.selected_items != [None]:
-            st.write("No items selected.")
+        # If no items selected, do not show anything (no placeholder)
+        pass
     
     # Button to add more dropdowns
     if st.button("Add more"):
