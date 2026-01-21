@@ -105,7 +105,7 @@ with left:
 
     # If no items selected
     if not st.session_state.selected_items:
-        st.write("No items selected.")
+        st.write(" ")
     
     # Button to add more dropdowns
     if st.button("Add more"):
