@@ -8,20 +8,18 @@ from load_data import load_json_from_firebase
 # Fetch data from Firebase (or any source you're using)
 data = load_json_from_firebase()
 
-# Example: Get tablets list (you can repeat this for syrups, injections, etc.)
+# Example: Get tablets, syrups, injections (you can repeat this for other categories)
 tablets = data.get("Names of tablets", [])
+syrups = data.get("Names of syrups", [])
+injections = data.get("Names of injections", [])
 
-# Initialize session state for items if not already initialized
-if "selected_items" not in st.session_state:
-    st.session_state.selected_items = []
-if "tablets_selected" not in st.session_state:
-    st.session_state.tablets_selected = []
-if "syrups_selected" not in st.session_state:
-    st.session_state.syrups_selected = []
-if "injections_selected" not in st.session_state:
-    st.session_state.injections_selected = []
-if "others_selected" not in st.session_state:
-    st.session_state.others_selected = []
+# Initialize session state for each category if not already initialized
+if "selected_tablets" not in st.session_state:
+    st.session_state.selected_tablets = []
+if "selected_syrups" not in st.session_state:
+    st.session_state.selected_syrups = []
+if "selected_injections" not in st.session_state:
+    st.session_state.selected_injections = []
 
 # Layout configuration
 st.set_page_config(layout="centered")
@@ -78,73 +76,105 @@ left, right = st.columns([1.2, 1])
 with left:
     st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-    # Initialize or load selected items
-    if "selected_items" not in st.session_state:
-        st.session_state.selected_items = []
-
-    # Render existing selected items (dropdowns with remove buttons)
-    if st.session_state.selected_items:
-        for idx, item in enumerate(st.session_state.selected_items):
+    # Render tablets dropdowns
+    if st.session_state.selected_tablets:
+        for idx, item in enumerate(st.session_state.selected_tablets):
             col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
             
             with col1:
-                # Render a dropdown for each selected item without any label
+                # Render a dropdown for each selected tablet
                 selected_item = st.selectbox(
                     "",
                     tablets,
                     index=tablets.index(item) if item else 0,  # Keep the previously selected item
-                    key=f"dropdown_{idx}"
+                    key=f"tablet_dropdown_{idx}"
                 )
                 # Update the item if the user selects something different
-                st.session_state.selected_items[idx] = selected_item
+                st.session_state.selected_tablets[idx] = selected_item
 
             with col2:
-                # Render a small cross button to remove the row
-                if st.button("❌", key=f"remove_{idx}"):
-                    st.session_state.selected_items.pop(idx)
+                # Render a small cross button to remove the tablet row
+                if st.button("❌", key=f"tablet_remove_{idx}"):
+                    st.session_state.selected_tablets.pop(idx)
                     break  # Exit loop to refresh the UI immediately
     else:
-        # If no items selected, do not show anything (no placeholder)
-        pass
+        pass  # No "No items selected" in left column
     
-    # Button to add more dropdowns
-    if st.button("Add more"):
-        st.session_state.selected_items.append(None)  # Add placeholder for next dropdown
+    # Button to add more tablets dropdowns
+    if st.button("Add more tablets"):
+        st.session_state.selected_tablets.append(None)  # Add placeholder for next tablet dropdown
+
+    # Render syrups dropdowns (same logic as tablets)
+    if st.session_state.selected_syrups:
+        for idx, item in enumerate(st.session_state.selected_syrups):
+            col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
+            
+            with col1:
+                selected_item = st.selectbox(
+                    "",
+                    syrups,
+                    index=syrups.index(item) if item else 0,
+                    key=f"syrup_dropdown_{idx}"
+                )
+                st.session_state.selected_syrups[idx] = selected_item
+
+            with col2:
+                if st.button("❌", key=f"syrup_remove_{idx}"):
+                    st.session_state.selected_syrups.pop(idx)
+                    break
+
+    # Button to add more syrups dropdowns
+    if st.button("Add more syrups"):
+        st.session_state.selected_syrups.append(None)
+
+    # Render injections dropdowns (same logic as tablets)
+    if st.session_state.selected_injections:
+        for idx, item in enumerate(st.session_state.selected_injections):
+            col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
+            
+            with col1:
+                selected_item = st.selectbox(
+                    "",
+                    injections,
+                    index=injections.index(item) if item else 0,
+                    key=f"injection_dropdown_{idx}"
+                )
+                st.session_state.selected_injections[idx] = selected_item
+
+            with col2:
+                if st.button("❌", key=f"injection_remove_{idx}"):
+                    st.session_state.selected_injections.pop(idx)
+                    break
+
+    # Button to add more injections dropdowns
+    if st.button("Add more injections"):
+        st.session_state.selected_injections.append(None)
 
 # -----------------------------
 # RIGHT COLUMN - Display Items
 # -----------------------------
 with right:
     # Display tablets selected
-    if st.session_state.tablets_selected:
-        for v in st.session_state.tablets_selected:
+    if st.session_state.selected_tablets:
+        for v in st.session_state.selected_tablets:
             st.write(f"• {v}")
     else:
-        st.write("No items selected.")
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-
-    # Display injections selected
-    if st.session_state.injections_selected:
-        for v in st.session_state.injections_selected:
-            st.write(f"• {v}")
-    else:
-        st.write("No items selected.")
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-
-    # Display others selected
-    if st.session_state.others_selected:
-        for v in st.session_state.others_selected:
-            st.write(f"• {v}")
-    else:
-        st.write("No items selected.")
+        st.write("No tablets selected.")
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # Display syrups selected
-    if st.session_state.syrups_selected:
-        for v in st.session_state.syrups_selected:
+    if st.session_state.selected_syrups:
+        for v in st.session_state.selected_syrups:
             st.write(f"• {v}")
     else:
-        st.write("No items selected.")
+        st.write("No syrups selected.")
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # Display injections selected
+    if st.session_state.selected_injections:
+        for v in st.session_state.selected_injections:
+            st.write(f"• {v}")
+    else:
+        st.write("No injections selected.")
