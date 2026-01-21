@@ -12,14 +12,8 @@ data = load_json_from_firebase()
 tablets = data.get("Names of tablets", [])
 
 # Initialize session state for items if not already initialized
-if "tablets_selected" not in st.session_state:
-    st.session_state.tablets_selected = []
-if "injections_selected" not in st.session_state:
-    st.session_state.injections_selected = []
-if "others_selected" not in st.session_state:
-    st.session_state.others_selected = []
-if "syrups_selected" not in st.session_state:
-    st.session_state.syrups_selected = []
+if "selected_items" not in st.session_state:
+    st.session_state.selected_items = []
 
 # Layout configuration
 st.set_page_config(layout="centered")
@@ -83,23 +77,27 @@ with left:
     # Show the current selected items
     if st.session_state.selected_items:
         st.write("Currently selected items:")
-        for item in st.session_state.selected_items:
-            st.write(f"• {item}")
+        for idx, item in enumerate(st.session_state.selected_items):
+            # Create a dropdown for each item
+            selected_item = st.selectbox(
+                f"Select item {idx + 1}", tablets, key=f"dropdown_{idx}"
+            )
+            
+            # If the item is selected, update the session state
+            if selected_item and selected_item != item:
+                st.session_state.selected_items[idx] = selected_item
+
+            # Create a cross (remove) button next to each dropdown
+            if st.button(f"❌", key=f"remove_{idx}"):
+                st.session_state.selected_items.pop(idx)
+                st.experimental_rerun()  # Rerun to update the UI without the removed item
+
     else:
         st.write("No items selected.")
 
-    # Render dropdown and add more functionality
-    if len(st.session_state.selected_items) < 5:  # Set a limit for selections
-        selected_item = st.selectbox(
-            "Select an item", tablets, key=f"dropdown_{len(st.session_state.selected_items)}"
-        )
-        # Add item to selected items when user makes a selection
-        if selected_item and selected_item not in st.session_state.selected_items:
-            st.session_state.selected_items.append(selected_item)
-
     # Button to add more dropdowns
     if st.button("Add more"):
-        st.session_state.selected_items.append(None)  # Placeholder for next dropdown
+        st.session_state.selected_items.append(None)  # Add placeholder for next dropdown
 
 # -----------------------------
 # RIGHT COLUMN - Display Items
@@ -137,4 +135,3 @@ with right:
         for v in st.session_state.syrups_selected:
             st.write(f"• {v}")
     else:
-        st.write("No items selected.")
