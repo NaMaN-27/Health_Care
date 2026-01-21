@@ -14,6 +14,14 @@ tablets = data.get("Names of tablets", [])
 # Initialize session state for items if not already initialized
 if "selected_items" not in st.session_state:
     st.session_state.selected_items = []
+if "tablets_selected" not in st.session_state:
+    st.session_state.tablets_selected = []
+if "syrups_selected" not in st.session_state:
+    st.session_state.syrups_selected = []
+if "injections_selected" not in st.session_state:
+    st.session_state.injections_selected = []
+if "others_selected" not in st.session_state:
+    st.session_state.others_selected = []
 
 # Layout configuration
 st.set_page_config(layout="centered")
