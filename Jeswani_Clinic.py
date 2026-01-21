@@ -135,3 +135,4 @@ with right:
         for v in st.session_state.syrups_selected:
             st.write(f"• {v}")
     else:
+        st.write("No items selected.")
