@@ -83,29 +83,30 @@ with left:
         st.session_state.selected_items = []
 
     # Render existing selected items (dropdowns with remove buttons)
-    for idx, item in enumerate(st.session_state.selected_items):
-        col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
-        
-        with col1:
-            # Render a dropdown for each selected item
-            selected_item = st.selectbox(
-                f"Select item {idx + 1}",
-                tablets,
-                index=tablets.index(item) if item else 0,  # Keep the previously selected item
-                key=f"dropdown_{idx}"
-            )
-            # Update the item if the user selects something different
-            st.session_state.selected_items[idx] = selected_item
+    if st.session_state.selected_items:
+        for idx, item in enumerate(st.session_state.selected_items):
+            col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
+            
+            with col1:
+                # Render a dropdown for each selected item
+                selected_item = st.selectbox(
+                    f"Select item {idx + 1}",
+                    tablets,
+                    index=tablets.index(item) if item else 0,  # Keep the previously selected item
+                    key=f"dropdown_{idx}"
+                )
+                # Update the item if the user selects something different
+                st.session_state.selected_items[idx] = selected_item
 
-        with col2:
-            # Render a small cross button to remove the row
-            if st.button("❌", key=f"remove_{idx}"):
-                st.session_state.selected_items.pop(idx)
-                break  # Exit loop to refresh the UI immediately
-
-    # If no items selected
-    if not st.session_state.selected_items:
-        st.write(" ")
+            with col2:
+                # Render a small cross button to remove the row
+                if st.button("❌", key=f"remove_{idx}"):
+                    st.session_state.selected_items.pop(idx)
+                    break  # Exit loop to refresh the UI immediately
+    else:
+        # Don't show "No items selected" if we just have the "Add more" button and no selection yet
+        if not st.session_state.selected_items and st.session_state.selected_items != [None]:
+            st.write("No items selected.")
     
     # Button to add more dropdowns
     if st.button("Add more"):
