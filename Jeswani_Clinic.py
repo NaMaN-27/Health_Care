@@ -76,18 +76,11 @@ left, right = st.columns([1.2, 1])
 with left:
     st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-    # Dropdown and plus button functionality
+    # Initialize or load selected items
     if "selected_items" not in st.session_state:
         st.session_state.selected_items = []
 
-    # Show the dropdown to select items
-    selected_item = st.selectbox("Select an item", tablets, key="dropdown")
-
-    if selected_item:
-        if selected_item not in st.session_state.selected_items:
-            st.session_state.selected_items.append(selected_item)
-
-    # Show the selected items as a list
+    # Show the current selected items
     if st.session_state.selected_items:
         st.write("Currently selected items:")
         for item in st.session_state.selected_items:
@@ -95,9 +88,18 @@ with left:
     else:
         st.write("No items selected.")
 
-    # Button to add more rows
+    # Render dropdown and add more functionality
+    if len(st.session_state.selected_items) < 5:  # Set a limit for selections
+        selected_item = st.selectbox(
+            "Select an item", tablets, key=f"dropdown_{len(st.session_state.selected_items)}"
+        )
+        # Add item to selected items when user makes a selection
+        if selected_item and selected_item not in st.session_state.selected_items:
+            st.session_state.selected_items.append(selected_item)
+
+    # Button to add more dropdowns
     if st.button("Add more"):
-        st.session_state.selected_items.append(None)  # Add placeholder for next selection
+        st.session_state.selected_items.append(None)  # Placeholder for next dropdown
 
 # -----------------------------
 # RIGHT COLUMN - Display Items
