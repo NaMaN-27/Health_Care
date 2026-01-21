@@ -74,27 +74,31 @@ with left:
     if "selected_items" not in st.session_state:
         st.session_state.selected_items = []
 
-    # Show the current selected items
-    if st.session_state.selected_items:
-        st.write("Currently selected items:")
-        for idx, item in enumerate(st.session_state.selected_items):
-            # Create a dropdown for each item
+    # Render existing selected items (dropdowns with remove buttons)
+    for idx, item in enumerate(st.session_state.selected_items):
+        col1, col2 = st.columns([3, 1])  # Two columns: one for dropdown, one for remove button
+        
+        with col1:
+            # Render a dropdown for each selected item
             selected_item = st.selectbox(
-                f"Select item {idx + 1}", tablets, key=f"dropdown_{idx}"
+                f"Select item {idx + 1}",
+                tablets,
+                index=tablets.index(item) if item else 0,  # Keep the previously selected item
+                key=f"dropdown_{idx}"
             )
-            
-            # If the item is selected, update the session state
-            if selected_item and selected_item != item:
-                st.session_state.selected_items[idx] = selected_item
+            # Update the item if the user selects something different
+            st.session_state.selected_items[idx] = selected_item
 
-            # Create a cross (remove) button next to each dropdown
-            if st.button(f"❌", key=f"remove_{idx}"):
+        with col2:
+            # Render a small cross button to remove the row
+            if st.button("❌", key=f"remove_{idx}"):
                 st.session_state.selected_items.pop(idx)
-                st.experimental_rerun()  # Rerun to update the UI without the removed item
+                break  # Exit loop to refresh the UI immediately
 
-    else:
+    # If no items selected
+    if not st.session_state.selected_items:
         st.write("No items selected.")
-
+    
     # Button to add more dropdowns
     if st.button("Add more"):
         st.session_state.selected_items.append(None)  # Add placeholder for next dropdown
