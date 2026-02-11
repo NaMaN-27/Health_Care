@@ -3,6 +3,7 @@ import json
 import datetime
 import firebase_admin
 from firebase_admin import credentials,storage
+from load_data import load_json_from_firebase
 
 
 if not firebase_admin._apps:
@@ -19,6 +20,11 @@ if not firebase_admin._apps:
 for k in ("tablets_selected", "syrups_selected", "injections_selected", "others_selected"):
     if k not in st.session_state:
         st.session_state[k] = []
+
+data = load_json_from_firebase()
+
+
+tablets = data["Names of tablets"]
 
 st.set_page_config(layout="centered")
 
@@ -84,6 +90,12 @@ address = st.text_input("", placeholder="Address")
 left, right = st.columns([1.2, 1])
 
 with left:
+    selected_items = st.multiselect(
+    "Select tablets:", 
+    tablets, 
+    default=st.session_state.tablets_selected  # Keep previously selected items
+    )
+    st.session_state.tablets_selected  = selected_items
     st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
     if st.session_state.tablets_selected:
