@@ -99,11 +99,11 @@ with left:
     st.session_state.tablets_selected  = selected_items
     st.markdown("<br><br><br><br>", unsafe_allow_html=True)
 
-    if st.session_state.tablets_selected:
-        for v in st.session_state.tablets_selected:
-            st.write(f"• {v}")
-    else:
-        st.write("No items selected.")
+    #if st.session_state.tablets_selected:
+    #    for v in st.session_state.tablets_selected:
+    #        st.write(f"• {v}")
+    #else:
+    #    st.write("No items selected.")
 
 with right:
     if st.session_state.injections_selected:
