@@ -93,6 +93,7 @@ with left:
     selected_items = st.multiselect(
     "Select tablets:", 
     tablets, 
+    max_selections=8,
     default=st.session_state.tablets_selected  # Keep previously selected items
     )
     st.session_state.tablets_selected  = selected_items
