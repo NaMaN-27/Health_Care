@@ -10,37 +10,28 @@ from load_data import load_json_from_firebase
 # ---------------------------------------------------
 st.set_page_config(layout="centered")
 
+
 # ---------------------------------------------------
 # WHITE MULTISELECT + BUTTON STYLE
 # ---------------------------------------------------
 st.markdown("""
 <style>
-
-/* Multiselect box */
 div[data-baseweb="select"] > div {
     background-color: white !important;
     color: black !important;
     border: 1px solid #ccc !important;
     border-radius: 8px !important;
 }
-
-/* Text inside */
 div[data-baseweb="select"] * {
     color: black !important;
 }
-
-/* Dropdown menu */
 div[data-baseweb="popover"] {
     background-color: white !important;
     color: black !important;
 }
-
-/* Hover option */
 li[role="option"]:hover {
     background-color: #f2f2f2 !important;
 }
-
-/* Button style */
 div.stButton > button {
     background-color: white;
     color: black;
@@ -48,7 +39,6 @@ div.stButton > button {
     border-radius: 6px;
     height: 38px;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -65,10 +55,35 @@ if not firebase_admin._apps:
 
 data = load_json_from_firebase()
 
-tablets = data["Names of tablets"]
-injections = data["Name of injection"]
-syrups = data["Name of Syrup"]
-others = data["Others"]
+
+# ---------------------------------------------------
+# SPACE HELPERS
+# ---------------------------------------------------
+def preserve_leading_spaces(options):
+    formatted = []
+    mapping = {}
+
+    for item in options:
+        leading_spaces = len(item) - len(item.lstrip(' '))
+        display = "\u00A0" * leading_spaces + item.lstrip(' ')
+        formatted.append(display)
+        mapping[display] = item
+
+    return formatted, mapping
+
+
+def display_with_spaces(text):
+    leading_spaces = len(text) - len(text.lstrip(' '))
+    return "\u00A0" * leading_spaces + text.lstrip(' ')
+
+
+# ---------------------------------------------------
+# PREPARE DATA
+# ---------------------------------------------------
+tablets, tab_map = preserve_leading_spaces(data["Names of tablets"])
+injections, inj_map = preserve_leading_spaces(data["Name of injection"])
+syrups, syr_map = preserve_leading_spaces(data["Name of Syrup"])
+others, oth_map = preserve_leading_spaces(data["Others"])
 
 
 # ---------------------------------------------------
@@ -87,12 +102,13 @@ for k in keys:
 
 
 # ---------------------------------------------------
-# CALLBACK FUNCTIONS
+# ADD FUNCTION
 # ---------------------------------------------------
-def add_items(selected_key, final_key):
+def add_items(selected_key, final_key, mapping):
     for item in st.session_state[selected_key]:
-        if item not in st.session_state[final_key]:
-            st.session_state[final_key].append(item)
+        original = mapping[item]
+        if original not in st.session_state[final_key]:
+            st.session_state[final_key].append(original)
     st.session_state[selected_key] = []
 
 
@@ -132,9 +148,9 @@ address = st.text_input("", placeholder="Address")
 
 
 # ---------------------------------------------------
-# MEDICINE SECTION FUNCTION
+# MEDICINE SECTION
 # ---------------------------------------------------
-def medicine_section(options, selected_key, final_key, button_key):
+def medicine_section(options, mapping, selected_key, final_key, button_key):
 
     col1, col2 = st.columns([4, 1])
 
@@ -150,15 +166,15 @@ def medicine_section(options, selected_key, final_key, button_key):
     with col2:
         st.write("")
         st.button(
-            "A",
+            "",
             key=button_key,
             on_click=add_items,
-            args=(selected_key, final_key)
+            args=(selected_key, final_key, mapping)
         )
 
-    # Show final list
+    # Show final list with preserved spacing
     for item in st.session_state[final_key]:
-        st.write("•", item)
+        st.markdown(f"• {display_with_spaces(item)}")
 
 
 # ---------------------------------------------------
@@ -167,11 +183,11 @@ def medicine_section(options, selected_key, final_key, button_key):
 left, right = st.columns([1.2, 1])
 
 with left:
-    medicine_section(tablets, "tablets_selected", "final_tablets", "btn_tab")
+    medicine_section(tablets, tab_map, "tablets_selected", "final_tablets", "btn_tab")
 
 with right:
-    medicine_section(injections, "injections_selected", "final_injections", "btn_inj")
+    medicine_section(injections, inj_map, "injections_selected", "final_injections", "btn_inj")
     st.markdown("<br>", unsafe_allow_html=True)
-    medicine_section(syrups, "syrups_selected", "final_syrups", "btn_syr")
+    medicine_section(others, oth_map, "others_selected", "final_others", "btn_oth")
     st.markdown("<br>", unsafe_allow_html=True)
-    medicine_section(others, "others_selected", "final_others", "btn_oth")
+    medicine_section(syrups, syr_map, "syrups_selected", "final_syrups", "btn_syr")

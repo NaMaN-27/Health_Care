@@ -54,9 +54,9 @@ if st.button("Save All"):
 
     # Split lines → clean → unique
     new_items = [
-        line.strip()
+        line.rstrip("\n")     # keep leading spaces, remove only newline
         for line in items_text.split("\n")
-        if line.strip()
+        if line.strip()       # validation only
     ]
 
     if not new_items:
