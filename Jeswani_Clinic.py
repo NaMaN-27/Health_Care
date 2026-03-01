@@ -174,7 +174,7 @@ def medicine_section(options, mapping, selected_key, final_key, button_key):
 
     # Show final list with preserved spacing
     for item in st.session_state[final_key]:
-        st.markdown(f"• {display_with_spaces(item)}")
+        st.markdown(f"{display_with_spaces(item)}")
 
 
 # ---------------------------------------------------
